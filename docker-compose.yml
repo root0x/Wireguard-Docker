@@ -1,0 +1,17 @@
+
+version: "3"
+
+services:
+  wireguard:
+    image: root0x/wireguard
+    volumes:
+      - /lib/modules:/lib/modules
+      - /opt/wireguard:/root/clients
+    cap_add:
+      - NET_ADMIN
+      - SYS_MODULE
+    environment:
+      - HOST=209.97.187.87:443
+    ports:
+      - "443:51820/udp"
+    container_name: wireguard
