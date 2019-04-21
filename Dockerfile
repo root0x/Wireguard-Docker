@@ -7,7 +7,7 @@ RUN apt-get update -y && \
     echo resolvconf resolvconf/linkify-resolvconf boolean false | debconf-set-selections && \
     echo "REPORT_ABSENT_SYMLINK=no" >> /etc/default/resolvconf && \
     add-apt-repository --yes ppa:wireguard/wireguard && \
-    apt-get install resolvconf qrencode
+    apt-get install -y resolvconf qrencode
 RUN apt install -y linux-headers-$(uname -r)
 RUN apt install -y wireguard
 
