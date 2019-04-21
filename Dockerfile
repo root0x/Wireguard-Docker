@@ -7,8 +7,7 @@ RUN apt-get update -y && \
     echo resolvconf resolvconf/linkify-resolvconf boolean false | debconf-set-selections && \
     echo "REPORT_ABSENT_SYMLINK=no" >> /etc/default/resolvconf && \
     add-apt-repository --yes ppa:wireguard/wireguard && \
-	apt-get install resolvconf
-RUN apt update
+    apt-get install resolvconf qrencode
 RUN apt install -y linux-headers-$(uname -r)
 RUN apt install -y wireguard
 
@@ -17,8 +16,7 @@ ADD genClientConfig.sh /root/genClientConfig.sh
 RUN bash /root/genServerConfig.sh
 RUN mv /root/genClientConfig.sh /usr/bin/genclient
 RUN chmod +x /usr/bin/genclient
+RUN rm /root/genServerConfig.sh
 
-RUN echo "#!/bin/sh" > /root/entrypoint.sh
-RUN echo "wg-quick up wg0" >> /root/entrypoint.sh 
-RUN echo "tail -f /dev/null" >> /root/entrypoint.sh
-ENTRYPOINT ["sh" , "/root/entrypoint.sh"]
+COPY entrypoint.sh /root/entrypoint.sh
+ENTRYPOINT ["bash" , "/root/entrypoint.sh"]

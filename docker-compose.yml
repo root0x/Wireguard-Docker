@@ -1,6 +1,10 @@
 
 version: "3"
 
+volumes:
+  client:
+    external: true
+
 services:
   wireguard:
     image: root0x/wireguard
