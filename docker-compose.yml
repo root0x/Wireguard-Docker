@@ -1,16 +1,14 @@
 
 version: "3"
 
-volumes:
-  client:
-    external: true
-
 services:
   wireguard:
     image: root0x/wireguard
     volumes:
       - /lib/modules:/lib/modules
       - /opt/wireguard:/root/clients
+    sysctls:
+      - "net.ipv4.conf.all.rp_filter=2"
     cap_add:
       - NET_ADMIN
       - SYS_MODULE

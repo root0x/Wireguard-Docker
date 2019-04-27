@@ -12,7 +12,7 @@ Address = $ip/32
 PrivateKey = $key
 
 [Peer]
-PublicKey = $(cat /root/server_public_key)
+PublicKey = $(cat /root/clients/server_public_key)
 Endpoint = $HOST
 # Route only vpn trafic through vpn
 AllowedIPs = 10.10.0.0/24
