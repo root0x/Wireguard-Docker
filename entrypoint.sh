@@ -37,7 +37,7 @@ fi
 clients=$(wg show | grep peer | awk '{print $2}')
 files=($(cat /root/clients/*/*.pub))
 echo > /root/last-ip.txt
-
+wg-quick up wg0
 for i in "${files[@]}"
 do
     if [[ $i =~ $clients ]]
