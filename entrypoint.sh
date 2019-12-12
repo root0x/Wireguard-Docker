@@ -34,19 +34,35 @@ if ! [ -x "$(command -v wg)" ]; then
 fi
 
 
-clients=$(wg show | grep peer | awk '{print $2}')
-files=($(cat /root/clients/*/*.pub))
-echo > /root/last-ip.txt
-wg-quick up wg0
-for i in "${files[@]}"
-do
-    if [[ $i =~ $clients ]]
-    then
-	ip="10.10.0."$(expr $(cat /root/last-ip.txt | tr "." " " | awk '{print $4}') + 2)
-	wg set wg0 peer $i allowed-ips $ip/32
-	echo $ip > /root/last-ip.txt
-    fi	
-done
 
+
+if [ $(find /root/clients/ -type d| wc -l) -gt 1 ]
+then
+    interfaces=($(ip a | grep wg0))
+
+    if [ -z "$interfaces" ]
+    then
+	wg-quick up wg0
+    fi
+    
+    
+    clients=$(wg show | grep peer | awk '{print $2}')
+    files=($(head -n 3 /root/clients/*/wg0.conf | grep "==>\|Address" | awk 'NR % 2 {gsub("/wg0.conf", "", $2); print $2} !(NR % 2) {print $3}'))
+    linecount=$(echo ${#files[@]})
+    linecount=$(($linecount-1))
+    echo > /root/last-ip.txt
+    start=0
+    end="/*.pub"
+
+    for i in $(seq 0 2 $linecount)
+    do
+	path=$(echo ${files[i]})
+	key=$(cat $path$end )
+	
+	wg set wg0 peer $key allowed-ips $(echo ${files[i+1]})
+	echo $ip > /root/last-ip.txt
+	# echo "$i "
+    done
+fi
 
 tail -f /dev/null

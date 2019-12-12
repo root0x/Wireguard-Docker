@@ -16,4 +16,5 @@ services:
       - HOST=209.97.187.87:443
     ports:
       - "443:51820/udp"
+    restart: always
     container_name: wireguard
