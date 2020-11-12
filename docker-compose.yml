@@ -13,7 +13,7 @@ services:
       - NET_ADMIN
       - SYS_MODULE
     environment:
-      - HOST=209.97.187.87:443
+      - HOST=1.2.3.4:443
     ports:
       - "443:51820/udp"
     restart: always
